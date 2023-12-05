@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ ! -d /var/backups/mysql/ ]; then
+    mkdir -p /var/backups/mysql/
+fi
+
+_MYSQLDUMP=$(command -v mysqldump)
+_GZIP=$(command -v gzip)
+CONF_FILE="/root/my.cnf"
+
+if [ -n "${1}" ]; then date=${1}; fi
+${_MYSQLDUMP} --defaults-extra-file=${CONF_FILE} --add-drop-database --add-drop-database --dump-date --skip-lock-tables --insert-ignore --all-databases | ${_GZIP} > "/var/backups/mysql/${date}.dump.sql.gz"

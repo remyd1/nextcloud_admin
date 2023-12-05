@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ ! -d /var/backups/pgsql/ ]; then
+    mkdir -p /var/backups/pgsql/
+    chown postgres:postgres /var/backups/pgsql/
+fi
+
+_PG_DUMPALL=$(command -v pg_dumpall)
+
+if [ -n "${1}" ]; then date=${1}; fi
+su - postgres -c "${_PG_DUMPALL}" > "/var/backups/pgsql/${date}.dump.sql"
